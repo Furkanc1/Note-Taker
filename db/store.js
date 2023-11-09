@@ -1,11 +1,11 @@
 const util = require('util');
-const fs = require('fs');
+const fileSystem = require('fs');
 
 // This package will be used to generate our unique ids. https://www.npmjs.com/package/uuid
 const uuidv1 = require('uuid/v1');
 
-const readFileAsync = util.promisify(fs.readFile);
-const writeFileAsync = util.promisify(fs.writeFile);
+const readFileAsync = util.promisify(fileSystem.readFile);
+const writeFileAsync = util.promisify(fileSystem.writeFile);
 
 class Store {
   read() {
@@ -38,14 +38,17 @@ class Store {
       throw new Error("Note 'title' and 'text' cannot be blank");
     }
 
-    // Add a unique id to the note using uuid package
-    const newNote = { title, text, id: uuidv1() };
+    // this.read().then((notes) => {
+      // Add a unique id to the note using uuid package
+      const newNote = { title, text, id: `note-${uuidv1()}`};
+  
+      // Get all notes, add the new note, write all the updated notes, return the newNote
+      return this.getNotes()
+        .then((notes) => [...notes, newNote])
+        .then((updatedNotes) => this.write(updatedNotes))
+        .then(() => newNote);
+    // });
 
-    // Get all notes, add the new note, write all the updated notes, return the newNote
-    return this.getNotes()
-      .then((notes) => [...notes, newNote])
-      .then((updatedNotes) => this.write(updatedNotes))
-      .then(() => newNote);
   }
 
   removeNote(id) {
