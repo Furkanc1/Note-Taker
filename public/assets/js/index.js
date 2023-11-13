@@ -42,6 +42,15 @@ const saveNote = (note) =>
     body: JSON.stringify(note),
   });
 
+const updateNote = (id, FieldsToUpdate) =>
+  fetch(`/api/notes/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(FieldsToUpdate),
+  });
+
 const deleteNote = (id) =>
   fetch(`/api/notes/${id}`, {
     method: 'DELETE',
@@ -50,31 +59,52 @@ const deleteNote = (id) =>
     },
   });
 
-const renderActiveNote = () => {
+const renderActiveNote = (updatedNote) => {
   hide(saveNoteBtn);
 
+  let title = updatedNote ? updatedNote.title : activeNote.title;
+  let text = updatedNote ? updatedNote.text : activeNote.text;
+
+  activeNote = {
+    ...activeNote,
+    title,
+    text
+  };
+
   if (activeNote.id) {
-    noteTitle.setAttribute('readonly', true);
-    noteText.setAttribute('readonly', true);
-    noteTitle.value = activeNote.title;
-    noteText.value = activeNote.text;
+    // noteTitle.setAttribute('readonly', true);
+    // noteText.setAttribute('readonly', true);
+    noteTitle.value = title;
+    noteText.value = text;
   } else {
-    noteTitle.removeAttribute('readonly');
-    noteText.removeAttribute('readonly');
+    // noteTitle.removeAttribute('readonly');
+    // noteText.removeAttribute('readonly');
     noteTitle.value = '';
     noteText.value = '';
   }
 };
 
 const handleNoteSave = () => {
-  const newNote = {
-    title: noteTitle.value,
-    text: noteText.value,
-  };
-  saveNote(newNote).then(() => {
-    getAndRenderNotes();
-    renderActiveNote();
-  });
+  let shouldEditNote = Object.keys(activeNote).length > 0 && activeNote.id;
+  if (shouldEditNote) {
+     let noteFieldsToUpdate = {
+      title: noteTitle.value,
+      text: noteText.value,
+    };
+    updateNote(activeNote.id, noteFieldsToUpdate).then(() => {
+      getAndRenderNotes();
+      renderActiveNote(noteFieldsToUpdate);
+    });
+  } else {
+    const newNote = {
+      title: noteTitle.value,
+      text: noteText.value,
+    };
+    saveNote(newNote).then(() => {
+      getAndRenderNotes();
+      renderActiveNote();
+    });
+  }
 };
 
 // Delete the clicked note

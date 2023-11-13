@@ -51,6 +51,23 @@ class Store {
 
   }
 
+  updateNote(id, fieldsToUpdate) {
+    // updates notes
+    return this.getNotes()
+      .then((notes) => notes.map((note) => {
+        if (note.id == id) {
+          return {
+            ...note, 
+           title: fieldsToUpdate.title,
+           text: fieldsToUpdate.text,
+          };
+        } else {
+          return note;
+        }
+      }))
+      .then((mappedNotes) => this.write(mappedNotes));
+  }
+
   removeNote(id) {
     // Get all notes, remove the note with the given id, write the filtered notes
     return this.getNotes()
