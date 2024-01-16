@@ -1,7 +1,10 @@
 # Note-Taker
 Note Taker Week 11 HW
 
-(PSA> Used tutor Help + Worked on with Brother + looked to chatGPT for influence.)
+LIVE SERVER URL: https://furksnotetaker-00d47992fe83.herokuapp.com/
+
+GITHUB.URL: https://github.com/Furkanc1/Note-Taker
+
 
 ## Your Task
 
@@ -141,5 +144,6 @@ You are required to submit BOTH of the following for review:
 
 * The URL of the GitHub repository, with a unique name and a README describing the project.
 
+(PSA> Used tutor Help + Worked on with Brother + looked to chatGPT for influence.)
 - - -
 © 2023 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
